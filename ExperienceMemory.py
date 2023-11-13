@@ -17,6 +17,10 @@ class ExperienceMemory:
         batch_sample = memory_buffer_tmp[:batch_size]
         del memory_buffer_tmp
         return batch_sample
+    
+
+    def get_size(self):
+        return len(self.memory_buffer)
 
     def clear_memory(self):
         del self.memory_buffer

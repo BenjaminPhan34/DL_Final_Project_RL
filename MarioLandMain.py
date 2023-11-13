@@ -102,7 +102,7 @@ def main():
 
         if mario.lives_left==0 or mario.time_left<200:
             print("End of the current episode")
-            if agent_manager.train_agent.experience_memory.max_size >= agent_manager.train_agent.train_size:
+            if agent_manager.train_agent.experience_memory.get_size() >= agent_manager.train_agent.train_size:
                 total_steps = 0
                 history = agent_manager.train_agent.train(agent_manager.target_agent)
                 history["exploration_proba"] = agent_manager.train_agent.exploration_proba
