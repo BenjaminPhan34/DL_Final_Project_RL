@@ -7,7 +7,7 @@ import os
 
 
 class DQNAgent:
-    def __init__(self, action_size, nbChannel, LR=0.0001, gamma=0.99, exploration_proba=1, exploration_proba_decay=0.005,
+    def __init__(self, action_size, nbChannel, LR=0.001, gamma=0.99, exploration_proba=1, exploration_proba_decay=0.001,
                  batch_size=64, train_size=2560):
         self.action_size = action_size
         self.lr = LR

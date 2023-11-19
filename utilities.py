@@ -102,6 +102,8 @@ def reward_function(mario,last_mario):
     # Check for negative rewards
     if mario.level_progress < last_mario.level_progress:
         reward -= 2  # Penalty for moving backward
+    if mario._level_progress_max > last_mario._level_progress_max:
+        reward += 5  # Penalty for moving backward
     elif mario.level_progress > last_mario.level_progress:
         reward += 3  # Reward for moving forward
     else:
