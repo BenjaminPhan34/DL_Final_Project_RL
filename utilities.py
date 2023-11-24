@@ -87,23 +87,19 @@ def reward2(mario,last_lives,last_score,last_progress):
 
 
 def reward_function(mario,last_mario):
-    # Define initial reward
     reward = 0
-    # Check if the episode is done (Mario won or lost)
     if mario.world[0]>last_mario.world[0] or mario.world[1]>last_mario.world[1]:
-        reward += 100
-    # Check for positive rewards
+        reward += 100 # New level (never achieved)
     if mario.coins > last_mario.coins:
         reward += 5  # Reward for collecting a coin
     if mario.score > last_mario.score:
         reward += 20  # Reward for increasing the score
     if mario.lives_left < last_mario.lives_left:
-        reward -= 20
+        reward -= 20 # Penalty for losing a life
     if mario._level_progress_max > last_mario._level_progress_max:
-        reward += 5  # Penalty for moving backward
-    # Check for negative rewards
+        reward += 5  # Penalty for incrasing max progress
     if mario.level_progress < last_mario.level_progress:
-        reward -= 2  # Penalty for moving backward    
+        reward -= 2  # Penalty for moving backward
     elif mario.level_progress > last_mario.level_progress:
         reward += 3  # Reward for moving forward
     else:
