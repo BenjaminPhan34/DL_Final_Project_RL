@@ -1,9 +1,7 @@
 # IMPORTS 
-import multiprocessing
 from shlex import join
 from AgentManager import AgentManager
 from MemoryManager import MemoryManager
-from sshkeyboard import listen_keyboard
 from VisualizationBoard import *
 from utilities import *
 import time
@@ -27,11 +25,11 @@ def main():
     release = [WindowEvent.RELEASE_ARROW_LEFT, WindowEvent.RELEASE_ARROW_RIGHT, WindowEvent.RELEASE_BUTTON_A]
 
     # GAME LAUNCHING 
-    pyboy = PyBoy(rom_path, game_wrapper=True , disable_renderer=True)
+    pyboy = PyBoy(rom_path, game_wrapper=True , disable_renderer = False)
     pyboy.set_emulation_speed(0) #cocaine mode  (ATTENTION: skip every pyboy tick)
     assert pyboy.cartridge_title() == "SUPER MARIOLAN"
     mario = pyboy.game_wrapper()
-    mario.start_game(timer_div=None, world_level=None, unlock_level_select=False)
+    mario.start_game(timer_div=None, world_level=None, unlock_level_select = False)
 
     assert mario.score == 0
     assert mario.lives_left == 2
@@ -41,7 +39,7 @@ def main():
     assert mario.fitness == 0 # A built-in fitness score for AI development
 
     ###### IMPORTANT CHOOSE THE MODE "NEW" TRAINING OR "CONTINUE" TRAINING ######
-    MODE = CONTINUE
+    MODE = NEW
 
     ###### Power off computer if True
     AUTOSHUTDOWN = False
@@ -59,7 +57,7 @@ def main():
 
     
     agent_manager = AgentManager(action_size, nbChan, MODE)
-    visualisation = VisualizationBoard("MarioLand_history.txt", disable_visualization = True)
+    visualisation = VisualizationBoard("MarioLand_history.txt", disable_visualization = False)
     memory_manager = MemoryManager(threshold=95)
     total_episodes = visualisation.nb_episodes
     print("Begin at episode :",total_episodes)
@@ -154,39 +152,6 @@ def main():
     if AUTOSHUTDOWN:
         os.system('shutdown.exe /s /t 0')
 
-def control_process(process, pause_event):
-    """
-    Receive a process object as an argument and provides the ability
-    to pause and resume the process.
-    """
-    
-    def press(key):
-        if key == 'p':
-            pause_event.clear()
-            print("Training paused. Press 'r' to resume.")
-        elif key == 'r':
-            pause_event.set()
-            print("Training resumed.")
-        elif key == 'q':
-            print("Training exit.")
-            process.kill()
-            sys.exit()
-
-    def release(key):
-        pass  # You can add logic for key release if needed
-
-    listener = listen_keyboard(on_press=press, on_release=release)
-
-
 if __name__ == "__main__":
     main()
     
-    """pause_event = multiprocessing.Event()
-    started_event = multiprocessing.Event()  # to know when the child started execution
-    # consider making this next process daemon for guaranteed cleanup
-    p = multiprocessing.Process(target=main, args=(pause_event, started_event))
-    p.daemon=True
-    p.start()
-    started_event.wait(timeout=5)  # to fix window's buggy terminal
-    control_process(p, pause_event)
-    """
